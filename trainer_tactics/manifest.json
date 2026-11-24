@@ -1,0 +1,27 @@
+{
+  "id": "trainer_tactics",
+  "name": "Trainer Tactics",
+  "version": "0.1.0",
+  "api": 3,
+  "entry": "main.lua",
+  "category": "GAMEPLAY",
+  "profile": "content",
+  "games": [
+    "firered",
+    "leafgreen"
+  ],
+  "game_version": "0.0.0-dev || >=0.3.93 <2.0.0",
+  "affects_link": false,
+  "dependencies": [],
+  "optional_dependencies": [
+    "trainer_desk",
+    "trainer_controls",
+    "trainer_pilot"
+  ],
+  "conflicts": [],
+  "permissions": [
+    "engine_internals"
+  ],
+  "description": "A battle brain for FireRed and LeafGreen. It works out every move's real damage with the game's own formula, what the foe can do back, who is faster and who on your team would do better, and then either advises you (the best play on the battle screen, with the numbers) or plays the battle itself: attacking, using status and set-up moves when they pay off, and switching out of bad matchups. Trainer Pilot uses it for its battles when both are installed. English, Spanish, Portuguese and Japanese.",
+  "github": "MarcoAFSchaefer/trainer-tactics"
+}

@@ -1,0 +1,28 @@
+# Publishes the mod as a release asset named <id>-<version>.zip (the mod's
+# files at the archive root) whenever a
+# tag like v1.2.3 is pushed. The Gen1Recomp launcher and mod index look for
+# exactly that file on the latest release.
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the tag matches manifest.json
+        run: |
+          version=$(python3 -c "import json;print(json.load(open('trainer_tactics/manifest.json'))['version'])")
+          test "v$version" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME but manifest says $version"; exit 1; }
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Build the zip
+        run: cd trainer_tactics && zip -r "../trainer_tactics-$VERSION.zip" . -x ".DS_Store"
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=$(awk -v v="## $VERSION" '$0==v{f=1;next} /^## /{f=0} f' CHANGELOG.md)
+          gh release create "$GITHUB_REF_NAME" "trainer_tactics-$VERSION.zip" --title "trainer_tactics $VERSION" --notes "${notes:-Release $VERSION}"
