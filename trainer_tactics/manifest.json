@@ -1,7 +1,7 @@
 {
   "id": "trainer_tactics",
   "name": "Trainer Tactics",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "api": 3,
   "entry": "main.lua",
   "category": "GAMEPLAY",
