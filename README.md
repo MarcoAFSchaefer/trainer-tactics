@@ -2,6 +2,8 @@
 
 A battle brain for Pokémon FireRed/LeafGreen on Gen1Recomp (mod API 3). It works out the best play of each turn and either shows it to you or plays it.
 
+![Trainer Tactics: the best play on the battle screen and the Tactics panel with the numbers](docs/images/advisor.png)
+
 ## What it does
 
 - **Advisor** (on by default): while you choose, a small box on the battle screen names the best play and the damage of your attacks. The **Tactics** panel in Trainer Desk shows the whole picture:
@@ -78,6 +80,10 @@ end
 ## Documentation
 
 [docs/GUIDE.md](docs/GUIDE.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/TRANSLATING.md](docs/TRANSLATING.md) · [docs/PUBLISHING.md](docs/PUBLISHING.md) · [CHANGELOG.md](CHANGELOG.md)
+
+## What it changes in the game
+
+[DIFFERENCES.md](DIFFERENCES.md) lists everything this mod does differently from the unmodded game.
 
 ## License
 
