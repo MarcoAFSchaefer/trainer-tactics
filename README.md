@@ -1,3 +1,5 @@
+![Trainer Tactics: the Tactics Badge of the Trainer Badges](docs/brand/banner.png)
+
 # Trainer Tactics
 
 A battle brain for Pokémon FireRed/LeafGreen on Gen1Recomp (mod API 3). It works out the best play of each turn and either shows it to you or plays it.
@@ -80,6 +82,21 @@ end
 ## Documentation
 
 [docs/GUIDE.md](docs/GUIDE.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/TRANSLATING.md](docs/TRANSLATING.md) · [docs/PUBLISHING.md](docs/PUBLISHING.md) · [CHANGELOG.md](CHANGELOG.md)
+
+## The Trainer Badges
+
+Six mods for FireRed and LeafGreen that work on their own and better together. Each one is a badge in the same case.
+
+![The six Trainer Badges: Desk, Lens, Pilot, Journey, Controls and Tactics](docs/brand/case.png)
+
+| | Mod | What it does |
+| --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-desk/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Desk](https://github.com/MarcoAFSchaefer/trainer-desk) | Docks and tabs around the game. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-lens/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Lens](https://github.com/MarcoAFSchaefer/trainer-lens) | Everything the game knows, on screen. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-pilot/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Pilot](https://github.com/MarcoAFSchaefer/trainer-pilot) | Trains and hunts while you are away. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-journey/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Journey](https://github.com/MarcoAFSchaefer/trainer-journey) | Where to go next, without spoilers. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-controls/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Controls](https://github.com/MarcoAFSchaefer/trainer-controls) | Every button, where you want it. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-tactics/main/docs/brand/badge.png" width="40" alt=""> | **Trainer Tactics** (this mod) | The best play, with the numbers. |
 
 ## What it changes in the game
 
