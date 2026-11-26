@@ -48,22 +48,66 @@ return function(mod)
     if ok then return a, b end
   end
 
+  -- What belongs to one save. The game keeps a store for mods per save slot
+  -- (mod.storage); the shared cache (mod.cache) is the same for every save and
+  -- for every copy of the game that is open. A save that has nothing of its own
+  -- yet starts from what the shared cache holds, and from then on keeps its own.
+  local PerSave = { values = nil, id = nil, checked = -math.huge, listeners = {}, dirty = false, wrote = 0 }
+  local function perSaveFlush()
+    if not (PerSave.dirty and PerSave.values) then return end
+    PerSave.dirty, PerSave.wrote = false, love.timer.getTime()
+    pcall(mod.storage.write, mod.storage, PerSave.game, "state", PerSave.values)
+  end
+  -- Which save is open: asked when the session changes, at most every few seconds.
+  local function perSaveBind(g)
+    if not (type(g) == "table" and g.session and g.save and g.phase == "field"
+        and type(mod.storage) == "table" and mod.storage.context and mod.storage.read and mod.storage.write) then return end
+    local now = love.timer.getTime()
+    if PerSave.dirty and now - PerSave.wrote >= 2 then perSaveFlush() end
+    if PerSave.session == g.session or now - PerSave.checked < 5 then return end
+    PerSave.session, PerSave.checked = g.session, now
+    local ok, context = pcall(mod.storage.context, mod.storage, g)
+    local id = ok and type(context) == "table" and context.playthroughId or nil
+    if id and id ~= PerSave.id then
+      perSaveFlush()
+      local okRead, data = pcall(mod.storage.read, mod.storage, g, "state")
+      PerSave.id, PerSave.game, PerSave.values = id, g, okRead and type(data) == "table" and data or {}
+      for _, listener in ipairs(PerSave.listeners) do pcall(listener) end
+    end
+  end
+  local function perSaveRead(key)
+    local own = PerSave.values and PerSave.values[key]
+    if type(own) == "string" then return own end
+    return mod.cache and mod.cache.read and mod.cache:read(key) or nil
+  end
+  -- `soon`: written at once (a setting); otherwise within two seconds (a counter).
+  local function perSaveWrite(key, text, soon)
+    if not PerSave.values then
+      -- no save open yet: the shared cache, as it always was
+      if mod.cache and mod.cache.write then mod.cache:write(key, text) end
+      return
+    end
+    if PerSave.values[key] == text then return end
+    PerSave.values[key], PerSave.dirty = text, true
+    if soon then perSaveFlush() end
+  end
   -- A switch that the mod option sets and the panel may change; the panel's
   -- choice holds until the option itself is changed again.
   local settings, optionSeen = {}, {}
   local function setSwitch(key, on)
     settings[key] = on and true or false
-    if mod.cache and mod.cache.write then
-      mod.cache:write(key, (settings[key] and "1" or "0") .. "," .. (option(key) and "1" or "0"))
+    perSaveWrite(key, (settings[key] and "1" or "0") .. "," .. (option(key) and "1" or "0"), true)
+  end
+  local function loadSwitches()
+    for _, key in ipairs({ "auto", "advisor" }) do
+      local on, from = tostring(perSaveRead(key) or ""):match("^([01]),([01])$")
+      local now = option(key) and "1" or "0"
+      if on and from == now then settings[key] = on == "1" else settings[key] = option(key) == true end
+      optionSeen[key] = option(key) == true
     end
   end
-  for _, key in ipairs({ "auto", "advisor" }) do
-    local saved = mod.cache and mod.cache.read and mod.cache:read(key)
-    local on, from = tostring(saved or ""):match("^([01]),([01])$")
-    local now = option(key) and "1" or "0"
-    if on and from == now then settings[key] = on == "1" else settings[key] = option(key) == true end
-    optionSeen[key] = option(key) == true
-  end
+  loadSwitches()
+  PerSave.listeners[#PerSave.listeners + 1] = loadSwitches   -- another save was opened: its own switches
   local function syncOptions()
     for _, key in ipairs({ "auto", "advisor" }) do
       local now = option(key) == true
@@ -386,6 +430,7 @@ return function(mod)
     end
   end
   mod.hooks:wrap("core.update", function(nextHook, g, dt)
+    pcall(perSaveBind, g)
     if game then pcall(syncOptions); pcall(syncDock) end
     return nextHook(g, dt)
   end, 880)

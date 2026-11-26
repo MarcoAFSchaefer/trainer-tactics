@@ -3,7 +3,7 @@
   "title": "Trainer Tactics",
   "author": "MarcoAFSchaefer",
   "summary": "A battle brain: the best play each turn with real damage numbers, shown as advice on the battle screen or played for you (moves, status, set-up, switches). Trainer Pilot uses it when installed.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "categories": [
     "GAMEPLAY",
     "QOL"
